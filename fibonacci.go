@@ -3,23 +3,24 @@ package main
 import "fmt"
 
 func fibonacci(n int) int {
+	fmt.Println("Run fib for", n)
 	if n < 2 {
 		return n
 	}
-	return fibonacci(n-1)+fibonacci(n-2);
+	return fibonacci(n-1) + fibonacci(n-2)
 }
-func memoize(fn func(int)int) func(int)int{
-	cache := map[int]int{}
-	return func(n int) int {
-		if cache[n] == 0 {
-			cache[n] = fn(n)
-		}
-		return cache[n]
+
+func fibMemoized(n int, m map[int]int) int {
+	if n < 2 {
+		return n
+	} else if m[n] == 0 {
+		m[n] = fibMemoized(n-1, m) + fibMemoized(n-2, m)
 	}
+	return m[n]
 }
-func main(){	
-	newFib := memoize(fibonacci)
-	fmt.Println(newFib(6))
-	
+
+func main() {
 	// fmt.Println(fibonacci(6))
+
+	fmt.Println(fibMemoized(6, map[int]int{}))
 }
